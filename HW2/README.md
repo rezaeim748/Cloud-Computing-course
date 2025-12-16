@@ -11,6 +11,10 @@ This system operates in three stages:
 
 The project showcases how modern backend systems can handle high availability, scalability, and fault tolerance by leveraging distributed services such as Redis for caching and Kubernetes for orchestration.
 
+> 🔧 **Note:**  
+> Kubernetes nodes cannot access locally built Docker images.  
+> Application images must be **tagged and pushed to Docker Hub** before deployment.
+
 ---
 
 ## 🚀 Overview
@@ -69,14 +73,28 @@ hw2-crypto-cache/
 
 ## 🧪 Step 1 – curl Docker Image
 
+This step builds a lightweight image containing `curl` and `wget`, which is later used for **in-cluster testing**.
+
 ### Build the image
 ```bash
-docker build -t hw2-curl:1.0 .
+docker build -t YOUR_DOCKERHUB_USERNAME/hw2-curl:1.0 .
+```
+
+Test the image locally:
+```bash
+docker run --rm YOUR_DOCKERHUB_USERNAME/hw2-curl:1.0
+```
+
+Push the image to Docker Hub:
+```bash
+docker push YOUR_DOCKERHUB_USERNAME/hw2-curl:1.0
 ```
 
 ---
 
 ## 🐳 Step 2 – Run with Docker Compose
+
+This step runs the API and Redis **locally** for functional validation.
 
 ```bash
 cd step2-app
@@ -85,7 +103,25 @@ docker compose up --build
 
 ### Test the API
 ```bash
-curl http://localhost:8000/price
+curl http://localhost:8000/health
+curl "http://localhost:8000/price?coin=bitcoin&currency=usd"
+curl "http://localhost:8000/price?coin=bitcoin&currency=usd"
+```
+
+The second request should return:
+```json
+"cached": true
+```
+
+Stop local services:
+```bash
+docker compose down
+```
+
+Build and push the API image for Kubernetes:
+```bash
+docker build -t YOUR_DOCKERHUB_USERNAME/hw2-crypto-api:1.0 .
+docker push YOUR_DOCKERHUB_USERNAME/hw2-crypto-api:1.0
 ```
 
 ---
@@ -95,9 +131,17 @@ curl http://localhost:8000/price
 ### Start Minikube
 ```bash
 minikube start
+kubectl get nodes
 ```
 
 ### Deploy resources
+
+Update the image name in `step3-k8s/app-deployment.yaml`:
+```yaml
+image: YOUR_DOCKERHUB_USERNAME/hw2-crypto-api:1.0
+```
+
+Apply manifests:
 ```bash
 kubectl apply -f step3-k8s/app-configmap.yaml
 kubectl apply -f step3-k8s/redis-pv.yaml
@@ -108,19 +152,36 @@ kubectl apply -f step3-k8s/app-deployment.yaml
 kubectl apply -f step3-k8s/app-service.yaml
 ```
 
+Verify:
+```bash
+kubectl get pods -o wide
+kubectl get svc
+kubectl get pv,pvc
+```
+
 ---
 
 ## 🔬 In-Cluster Testing
 
+Load the curl image if needed:
 ```bash
-minikube image load hw2-curl:1.0
-kubectl run curltest --image=hw2-curl:1.0 --restart=Never --command -- sh -c "sleep 3600"
+minikube image load YOUR_DOCKERHUB_USERNAME/hw2-curl:1.0
+```
+
+Create test pod:
+```bash
+kubectl run curltest   --image=YOUR_DOCKERHUB_USERNAME/hw2-curl:1.0   --restart=Never --command -- sh -c "sleep 3600"
+```
+
+Exec into the pod:
+```bash
 kubectl exec -it curltest -- sh
 ```
 
+Test the service:
 ```sh
 for i in $(seq 1 10); do
-  wget -qO- http://crypto-api/price
+  wget -qO- "http://crypto-api/price?coin=bitcoin&currency=usd"
   echo
 done
 ```
@@ -131,6 +192,7 @@ done
 
 ```bash
 kubectl delete pod curltest
+kubectl delete -f step3-k8s
 minikube stop
 ```
 
@@ -138,4 +200,4 @@ minikube stop
 
 ## 🏁 Conclusion
 
-This project demonstrates Docker, Docker Compose, and Kubernetes fundamentals, including service discovery, persistence, and distributed caching using Redis.
+This project demonstrates Docker, Docker Compose, and Kubernetes fundamentals, including service discovery, persistent storage, and distributed caching using Redis. It provides a complete example of developing, containerizing, and deploying a cloud-native application.
