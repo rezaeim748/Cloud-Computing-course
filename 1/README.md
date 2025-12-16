@@ -1,29 +1,11 @@
 # ☁️ Cloud Ads Starter
 
 ## Introduction
-This project implements a cloud-based advertisement registration and processing system designed to demonstrate practical usage of modern cloud services and distributed backend architectures. The main goal of the project is to build a realistic service that integrates multiple cloud components—such as databases, object storage, message queues, image processing APIs, and email services—into a cohesive, scalable application.
+Cloud Ads Starter is a backend system for registering and processing image-based advertisements in a scalable and decoupled manner. The goal of the project is to model a realistic cloud service that integrates multiple infrastructure components—such as databases, object storage, message queues, and third-party APIs—into a cohesive distributed system.
 
-In this system, users can submit advertisements for vehicles (e.g., cars, motorcycles, bicycles) by providing a textual description, an image, and an email address. Upon submission, the advertisement is stored and processed asynchronously. The uploaded image is analyzed using an image tagging service to determine whether it actually contains a vehicle. Based on the result of this analysis, the advertisement is either approved and categorized or rejected. Finally, the user is notified of the outcome via email.
+Users submit advertisements by providing a textual description, an image, and an email address. The request is handled synchronously only for validation and persistence, while all computationally intensive and decision-making steps are executed **asynchronously**. Uploaded images are stored in S3-compatible object storage and analyzed by an external image tagging service to determine whether they contain a vehicle. Based on the analysis result, the advertisement is either approved and categorized or rejected, and the user is notified of the outcome via email.
 
-The architecture follows a microservice-oriented design and consists of two main backend services:
-
-A request-handling service responsible for receiving user requests, storing advertisement data, uploading images to object storage, and publishing processing jobs to a message queue.
-
-A worker service that consumes messages from the queue, retrieves images, performs image tagging, updates the advertisement status in the database, and sends email notifications.
-
-To reflect real-world cloud environments, the project makes use of:
-
-PostgreSQL as a managed database service (DBaaS)
-
-S3-compatible object storage for storing advertisement images
-
-RabbitMQ for asynchronous communication between services
-
-Imagga for image tagging and classification
-
-Mailgun for email notification delivery
-
-This project was developed as part of a Cloud Computing course assignment, with the primary objective of gaining hands-on experience in designing, implementing, and deploying distributed systems using cloud services, rather than focusing solely on business logic or UI concerns
+The system follows a **microservice-oriented architecture** consisting of an API service for request handling and a worker service for background processing. This design allows the system to remain responsive under load while enabling horizontal scalability and loose coupling between components.
 
 ---
 
