@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crypto-api-config
+data:
+  REDIS_URL: "redis://redis:6379/0"
+  CACHE_TTL_SECONDS: "300"
+  DEFAULT_COIN: "bitcoin"
+  DEFAULT_CURRENCY: "usd"

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crypto-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: crypto-api
+  template:
+    metadata:
+      labels:
+        app: crypto-api
+    spec:
+      containers:
+        - name: crypto-api
+          image: rezaeim748/hw2-crypto-api:1.0
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: crypto-api-config
