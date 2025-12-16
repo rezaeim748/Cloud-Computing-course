@@ -1,22 +1,28 @@
 # 🪙 HW2 – Crypto Price Cache  
 
-## 🌟 Overview
+## 🌟 Introduction
 
-This project implements a **containerized cryptocurrency price API** with **Redis-based caching**, developed as part of the **Cloud Computing** course homework.
+The **Crypto Price Cache** project is a scalable backend system designed to fetch, cache, and serve real-time cryptocurrency price data using Docker, Kubernetes, and Redis. The objective of this project is to demonstrate how a **cloud-native application** can be constructed and deployed in a Kubernetes environment with the integration of **containerized services**, **load balancing**, and **caching**.
 
-The goal is to demonstrate how a **cloud-native application** can be built, containerized, and deployed step-by-step using **Docker** and **Kubernetes**.
+This system operates in three stages:
+1. **Docker Image Creation**: Building a lightweight image for testing the API endpoint.
+2. **Local Development**: Running the Crypto API and Redis services with **Docker Compose** for testing.
+3. **Kubernetes Deployment**: Deploying the application on a Kubernetes cluster with **persistent storage**, **load balancing**, and **service discovery**.
 
-🚀 The system is implemented in **three progressive stages**:
-
-1️⃣ Building a custom Docker image for HTTP testing  
-2️⃣ Running the API + Redis locally using **Docker Compose**  
-3️⃣ Deploying the system on **Kubernetes (Minikube)** with:
-- Replicated API pods  
-- Persistent Redis storage  
-- Service discovery & load balancing  
+The project showcases how modern backend systems can handle high availability, scalability, and fault tolerance by leveraging distributed services such as **Redis** for caching and **Kubernetes** for orchestration.
 
 ---
 
+## 🚀 Overview
+
+**Crypto Price Cache** is a containerized backend system that implements:
+
+- **Cryptocurrency Price API**  
+- **Redis Caching** for improved performance  
+- **Docker Compose** for local development  
+- **Kubernetes** deployment with **load balancing** and **service discovery**  
+
+---
 ## 🏗️ Architecture Overview
 
 ### 🔹 Crypto API
