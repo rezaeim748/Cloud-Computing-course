@@ -1,16 +1,6 @@
 # 🪙 HW2 – Crypto Price Cache  
 ### Docker & Kubernetes • Redis • Cloud Computing
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Docker-✓-blue?logo=docker">
-  <img src="https://img.shields.io/badge/Kubernetes-✓-blue?logo=kubernetes">
-  <img src="https://img.shields.io/badge/Redis-Cache-red?logo=redis">
-  <img src="https://img.shields.io/badge/Minikube-Local%20Cluster-green">
-  <img src="https://img.shields.io/badge/Course-Cloud%20Computing-purple">
-</p>
-
----
-
 ## 🌟 Overview
 
 This project implements a **containerized cryptocurrency price API** with **Redis-based caching**, developed as part of the **Cloud Computing** course homework.
