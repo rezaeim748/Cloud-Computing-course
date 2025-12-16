@@ -1,0 +1,106 @@
+Of course — here’s a **complete conceptual summary** of how this “Cloud Ads” system works, describing the logical flow and how all its parts interact, without going into code details:
+
+---
+
+## 🧩 Overview
+
+This system is a **cloud-based advertisement approval pipeline**.
+It allows users to upload ads (with images) through an API, stores them in cloud storage, analyzes them automatically using an AI tagging service, and finally decides whether the ad should be **approved or rejected**.
+
+The system is built around **three main components** that communicate asynchronously.
+
+---
+
+## ⚙️ 1. Service API (FastAPI)
+
+* **Purpose:** It’s the public interface of the system.
+  Users (or client apps) send requests here to create ads.
+
+* **Workflow:**
+
+  1. A user uploads an image (e.g., a photo of a car or motorcycle) and their email via `/ads`.
+  2. The API temporarily saves the image, uploads it to cloud storage (Arvan S3 bucket), and creates an ad entry in the **PostgreSQL database**.
+  3. The API doesn’t analyze the image directly. Instead, it publishes a **message to a queue** (RabbitMQ) containing the ad information (e.g., ad ID, image URL, user email).
+  4. The API responds immediately — so users don’t wait for the AI analysis.
+
+---
+
+## 📨 2. Message Queue (RabbitMQ)
+
+* **Purpose:** It’s the system’s “messenger.”
+  It decouples image uploads from heavy background processing.
+
+* **Workflow:**
+
+  1. When a new ad is created, the API sends a message to RabbitMQ.
+  2. The message stays in a queue until another service (the worker) picks it up.
+  3. This guarantees that even if the worker is temporarily down, no ads are lost.
+
+---
+
+## 🧠 3. Worker Service (Background Processor)
+
+* **Purpose:** It processes queued ads asynchronously — analyzing images, deciding approval, and notifying users.
+
+* **Workflow:**
+
+  1. The worker continuously listens to the RabbitMQ queue.
+  2. When it receives a new ad message:
+
+     * It downloads the image from **cloud storage** (using the S3 URL).
+     * Sends the image to **Imagga**, an AI image tagging API.
+     * Receives a list of detected objects and confidence scores.
+  3. Based on the tags (e.g., if the image contains “car”, “motorcycle”, “vehicle”), it decides:
+
+     * ✅ **Approve** — the image contains a valid vehicle.
+     * ❌ **Reject** — no relevant vehicle detected.
+  4. It updates the ad’s status in PostgreSQL accordingly.
+  5. It sends an **email notification** to the user using **Mailgun** — telling them whether their ad was approved or rejected.
+
+---
+
+## 🗄️ Supporting Components
+
+### 🔹 PostgreSQL
+
+* Stores ad records and their metadata (email, image URL, status).
+* Acts as the single source of truth for ad lifecycle.
+
+### 🔹 ArvanCloud (S3-compatible Object Storage)
+
+* Stores the uploaded images permanently.
+* Each ad has its own folder (e.g., `ads/1/`, `ads/2/`).
+* Provides public URLs for AI services to analyze the files.
+
+### 🔹 Mailgun
+
+* Handles outbound emails.
+* Notifies users of the decision automatically.
+
+---
+
+## 🔁 Summary of the Whole Flow
+
+| Step | Component                 | Action                                                                  |
+| ---- | ------------------------- | ----------------------------------------------------------------------- |
+| 1️⃣  | **User / Swagger UI**     | Uploads image and email                                                 |
+| 2️⃣  | **Service API (FastAPI)** | Saves metadata, uploads image, sends message to RabbitMQ                |
+| 3️⃣  | **RabbitMQ**              | Queues the message for background processing                            |
+| 4️⃣  | **Worker**                | Reads message → Downloads image → Calls Imagga → Decides approve/reject |
+| 5️⃣  | **PostgreSQL**            | Stores final ad status                                                  |
+| 6️⃣  | **Mailgun**               | Sends result email to the user                                          |
+| 7️⃣  | **Arvan S3**              | Hosts the ad image permanently                                          |
+
+---
+
+## 💡 Key Design Ideas
+
+* **Asynchronous architecture:** The user doesn’t wait for AI analysis — processing happens in the background.
+* **Scalable:** Many workers can run in parallel for faster throughput.
+* **Reliable:** RabbitMQ ensures no data is lost even if one component fails.
+* **Modular:** Each component (API, worker, database, storage) can evolve or be replaced independently.
+
+---
+
+Would you like me to add a **diagram** showing the flow (user → API → RabbitMQ → worker → Imagga → database → email)?
+It would help visualize the system architecture clearly.
