@@ -2,25 +2,25 @@
 
 ## 🌟 Introduction
 
-The **Crypto Price Cache** project is a scalable backend system designed to fetch, cache, and serve real-time cryptocurrency price data using Docker, Kubernetes, and Redis. The objective of this project is to demonstrate how a **cloud-native application** can be constructed and deployed in a Kubernetes environment with the integration of **containerized services**, **load balancing**, and **caching**.
+The Crypto Price Cache project is a scalable backend system designed to fetch, cache, and serve real-time cryptocurrency price data using Docker, Kubernetes, and Redis. The objective of this project is to demonstrate how a cloud-native application can be constructed and deployed in a Kubernetes environment with the integration of containerized services, load balancing, and caching.
 
 This system operates in three stages:
-1. **Docker Image Creation**: Building a lightweight image for testing the API endpoint.
-2. **Local Development**: Running the Crypto API and Redis services with **Docker Compose** for testing.
-3. **Kubernetes Deployment**: Deploying the application on a Kubernetes cluster with **persistent storage**, **load balancing**, and **service discovery**.
+1. Docker Image Creation: Building a lightweight image for testing the API endpoint.
+2. Local Development: Running the Crypto API and Redis services with Docker Compose for testing.
+3. Kubernetes Deployment: Deploying the application on a Kubernetes cluster with persistent storage, load balancing, and service discovery.
 
-The project showcases how modern backend systems can handle high availability, scalability, and fault tolerance by leveraging distributed services such as **Redis** for caching and **Kubernetes** for orchestration.
+The project showcases how modern backend systems can handle high availability, scalability, and fault tolerance by leveraging distributed services such as Redis for caching and Kubernetes for orchestration.
 
 ---
 
 ## 🚀 Overview
 
-**Crypto Price Cache** is a containerized backend system that implements:
+Crypto Price Cache is a containerized backend system that implements:
 
-- **Cryptocurrency Price API**  
-- **Redis Caching** for improved performance  
-- **Docker Compose** for local development  
-- **Kubernetes** deployment with **load balancing** and **service discovery**  
+- Cryptocurrency Price API  
+- Redis Caching for improved performance  
+- Docker Compose for local development  
+- Kubernetes deployment with load balancing and service discovery  
 
 ---
 ## 🏗️ Architecture
@@ -32,11 +32,11 @@ The project showcases how modern backend systems can handle high availability, s
 
 ### 🔹 Redis Cache
 - Shared cache across API replicas  
-- Backed by **PersistentVolume (PV)** and **PersistentVolumeClaim (PVC)** in Kubernetes  
+- Backed by PersistentVolume (PV) and PersistentVolumeClaim (PVC) in Kubernetes  
 
 ### 🔹 curltest Pod
 - Temporary debugging pod  
-- Used to validate **in-cluster networking**, DNS, and load balancing  
+- Used to validate in-cluster networking, DNS, and load balancing  
 
 ---
 
