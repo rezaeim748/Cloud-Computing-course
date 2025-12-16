@@ -1,5 +1,4 @@
 # 🪙 HW2 – Crypto Price Cache  
-### Docker & Kubernetes • Redis • Cloud Computing
 
 ## 🌟 Overview
 
