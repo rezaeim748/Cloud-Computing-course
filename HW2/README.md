@@ -23,7 +23,7 @@ The project showcases how modern backend systems can handle high availability, s
 - **Kubernetes** deployment with **load balancing** and **service discovery**  
 
 ---
-## 🏗️ Architecture Overview
+## 🏗️ Architecture
 
 ### 🔹 Crypto API
 - Python-based REST API  
