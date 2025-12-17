@@ -1,4 +1,4 @@
-# Cloud-Computing-Course
+# Cloud-Computing-course
 
 This repository contains my solutions for the **Cloud Computing course** projects.  
 Each project is organized in its own folder with source code and a dedicated `README.md` explaining the tasks, architecture, and execution steps.
