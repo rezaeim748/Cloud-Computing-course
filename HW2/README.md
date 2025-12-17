@@ -1,4 +1,4 @@
-# 🪙 HW2 – Crypto Price Cache  
+# 🪙 Crypto Price Caching Service  
 
 ## 🌟 Introduction
 

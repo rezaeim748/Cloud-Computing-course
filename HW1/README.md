@@ -1,4 +1,4 @@
-# ☁️ Cloud Ads Starter
+# ☁️ Cloud-Based Advertisement Processing System
 
 ## Introduction
 Cloud Ads Starter is a backend system for registering and processing image-based advertisements in a scalable and decoupled manner. The goal of the project is to model a realistic cloud service that integrates multiple infrastructure components—such as databases, object storage, message queues, and third-party APIs—into a cohesive distributed system.
